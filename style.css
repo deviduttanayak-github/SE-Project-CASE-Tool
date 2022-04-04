@@ -1,0 +1,8 @@
+:root{
+    --page-bg-color : "#FFFFFF"
+}
+
+body{
+    color: white;
+    background-color: var(--page-bg-color);
+}
