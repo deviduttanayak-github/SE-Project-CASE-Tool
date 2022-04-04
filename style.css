@@ -1,8 +1,17 @@
 :root{
-    --page-bg-color : "#FFFFFF"
+    --page-bg-color : "#FFFFFF";
 }
 
 body{
-    color: white;
+    color: rgb(210, 141, 141);
     background-color: var(--page-bg-color);
+}
+
+.bg-d1{
+    color: white;
+    background-color: rgb(72, 89, 104);
+}
+.bg-d2{
+    color: white;
+    background-color: rgb(85, 118, 147);
 }

@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CASE Tool | Draw diagrams with ease</title>
+    <link rel="icon" href="images/logo.png" type="image/icon type">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jointjs/3.4.4/joint.css" />
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
@@ -26,13 +31,35 @@
               </li>
               
             </ul>
-            <div class="d-flex bg-danger">
-                hello
+            <div class="d-flex justify-content-center w-100">
+              <span class="badge bg-info text-dark display-2 file-name"></span>
             </div>
+
+            <div class="d-flex" id="change-file-name">
+              <input class="form-control me-2" type="search" placeholder="Untitled" aria-label="Search">
+              <button class="btn btn-outline-info" type="submit">Rename</button>
+            </div>
+
           </div>
         </div>
     </nav>
 
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-3 bg-d1 vh-100">
+          Components
+          <div class="container">
+            
+          </div>
+        </div>
+        <div class="col-9 bg-d2 vh-100">
+          Main Editor
+          <div class="container m-2 d-flex justify-content-center">
+            <div id="root"></div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- JavaScript Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
