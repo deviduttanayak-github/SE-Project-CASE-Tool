@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CASE Tool | Draw diagrams with ease</title>
     <link rel="icon" href="images/logo.png" type="image/icon type">
@@ -46,14 +46,40 @@
 
     <div class="container-fluid">
       <div class="row">
-        <div class="col-3 bg-d1 vh-100">
-          Components
-          <div class="container">
-            
+        <div class="col-lg-3 bg-d1 vh-100">
+          <div class="d-flex justify-content-center mt-1">
+            <h6>Components</h6>
+          </div>
+          <div class="container mb-2 pb-2 border-bottom ">
+            <div class="row d-flex justify-content-center">
+              <button name="module" class="component btn btn-info col-3 m-1">Module</button>
+              <button name="library" class="component btn btn-info col-3 m-1">Library</button>
+              <button class="btn btn-info col-3 m-1">Control Flow</button>
+              <button class="btn btn-info col-3 m-1">Data Flow</button>
+              <button class="btn btn-info col-3 m-1">Comp 5</button>
+              <button class="btn btn-info col-3 m-1">Comp 6</button>
+            </div>
+          </div>
+          <div class="d-flex justify-content-center">
+            <h6>Selected Component Attributes</h6>
+          </div>
+          <div id="selected-comp" class="container bg-d3 p-3">
+            <!-- pos(x, y), dim(L, W), Label(text),   -->
+            <label id="sc-id" class="">ID: 100</label> <br> 
+            <label id="sc-pos" class="">Position: (1000, 1000)</label> <br>
+            <label class="">Dimension: </label>
+            <input id="sc-input-dim" type="text" placeholder="Separated by space" > <br>
+            <label class="">Text: </label> <br>
+            <textarea id="sc-input-txt"></textarea> <br>
+            <button id="sc-update" class="btn btn-primary">Update</button>
+            <button id="sc-delete" class="btn btn-danger">Delete</button>
+
           </div>
         </div>
-        <div class="col-9 bg-d2 vh-100">
-          Main Editor
+        <div class="col-lg-9 bg-d2 vh-100 d-flex flex-column">
+          <div class="d-flex justify-content-center mt-1">
+            <h6>Main Editor</h6>
+          </div>
           <div class="container m-2 d-flex justify-content-center">
             <div id="root"></div>
           </div>
@@ -70,6 +96,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jointjs/3.4.4/joint.js"></script>
 
     <!-- code -->
+    <script src="component.js"></script>
     <script src="main.js"></script>
 </body>
 </html>

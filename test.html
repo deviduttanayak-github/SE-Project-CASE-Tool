@@ -16,6 +16,25 @@
 
     <!-- code -->
     <script type="text/javascript">
+        const make_rect = (posx, posy, L, W, lab = "Hello") => {
+            let rect = new joint.shapes.standard.Rectangle();
+            rect.position(posx, posy);
+            rect.resize(L, W);
+            rect.attr({
+                body: {
+                    fill: 'blue'
+                },
+                label: {
+                    text: lab,
+                    fill: 'white'
+                }
+            });
+            return rect;
+        };
+
+    </script>
+
+    <script type="text/javascript">
 
         var namespace = joint.shapes;
 
@@ -24,33 +43,34 @@
         var paper = new joint.dia.Paper({
             el: document.getElementById('myholder'),
             model: graph,
-            width: 600,
-            height: 100,
+            width: 1000,
+            height: 700,
             gridSize: 1,
             cellViewNamespace: namespace,
             background : {
-                color : "#222222"
+                color : "#AAAAAA"
             }
         });
 
-        var rect = new joint.shapes.standard.Rectangle();
-        rect.position(100, 30);
-        rect.resize(100, 40);
-        rect.attr({
-            body: {
-                fill: 'blue'
-            },
-            label: {
-                text: 'Hello',
-                fill: 'white'
-            }
-        });
+        paper.on("element:contextmenu", (cellView, e, x, y) => {
+            let comp = cellView.model;
+            console.log("element:contextmenu : ", cellView, e, x, y);
+            console.log("===========", comp);
+        })
+        paper.on("cell:contextmenu", (cellView, e, x, y) => {
+            console.log("cell:contextmenu : ", cellView, e, x, y);
+        })
+        paper.on("blank:contextmenu", (cellView, e, x, y) => {
+            console.log("blank:contextmenu : ", cellView, e, x, y);
+        })
+        paper.on("link:contextmenu", (cellView, e, x, y) => {
+            console.log("link:contextmenu : ", cellView, e, x, y);
+        })
+
+        var rect = make_rect(100, 200, 50, 50, "hey");
+        var rect2 = make_rect(400, 200, 100, 100, "hey2");
+        console.log(rect);
         rect.addTo(graph);
-
-        var rect2 = rect.clone();
-        rect2.resize(300, 80)
-        rect2.translate(300, 0);
-        rect2.attr('label/text', 'World! kjhdkja haka iudhasud\n jakdsh ah jashd akjdhakj h');
         rect2.addTo(graph);
 
         var link = new joint.shapes.standard.Link();
