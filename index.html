@@ -54,8 +54,8 @@
             <div class="row d-flex justify-content-center">
               <button name="module" class="component btn btn-info col-3 m-1">Module</button>
               <button name="library" class="component btn btn-info col-3 m-1">Library</button>
-              <button class="btn btn-info col-3 m-1">Control Flow</button>
-              <button class="btn btn-info col-3 m-1">Data Flow</button>
+              <button name="control-flow" class="component btn btn-info col-3 m-1">Control Flow</button>
+              <button name="data-flow" class="component btn btn-info col-3 m-1">Data Flow</button>
               <button class="btn btn-info col-3 m-1">Comp 5</button>
               <button class="btn btn-info col-3 m-1">Comp 6</button>
             </div>
@@ -71,10 +71,12 @@
             <input id="sc-input-dim" type="text" placeholder="Separated by space" > <br>
             <label class="">Text: </label> <br>
             <textarea id="sc-input-txt"></textarea> <br>
-            <button id="sc-update" class="btn btn-primary">Update</button>
-            <button id="sc-delete" class="btn btn-danger">Delete</button>
+            <label id="sc-src-tar">Src & Tar: </label>
+            <input id="sc-input-src-tar" placeholder="Id separated by space"> 
+            <button id="sc-update" class="btn btn-primary mt-2">Update</button>
+            <button id="sc-delete" class="btn btn-danger mt-2">Delete</button>
             <br>
-            <small><i style="color: rgb(190, 196, 203);">Right click over component to select it.</i></small>
+            <small><i style="color: rgb(190, 196, 203);">Tip: Right click over component to select it.</i></small>
           </div>
         </div>
         <div class="col-lg-9 bg-d2 vh-100 d-flex flex-column">

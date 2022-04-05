@@ -59,6 +59,27 @@ const make_rect = (comp) => {
     return rect;
 };
 
+const make_link = (comp) => {
+    console.log("make_link "); comp.display();
+    var link = new joint.shapes.standard.Link();
+    link.source(comp.src);
+    link.target(comp.tar);
+    link.attr({
+        line : {
+            stroke : comp.color,
+            strokeWidth : comp.strokeWidth
+        }
+    });
+    link.labels([{
+        attrs : {
+            text : {
+                text : comp.label
+            }
+        }
+    }]);
+    return link;
+};
+
 const make_component = (comp) => {
     console.log(comp.display());
     var obj = null;
@@ -66,7 +87,10 @@ const make_component = (comp) => {
         obj = make_rect(comp);
     }
     else if(comp.type == TYPE_LINK){
-
+        obj = make_link(comp);
+    }
+    else{
+        alert("No such Component available yet.");
     }
     return obj;
 };
@@ -90,6 +114,22 @@ const addComponent = (e) => {
         id2class[id] = new Library(id, "Library spawned!");
         id2comp[id].addTo(graph);
     }
+    else if(tt == "control-flow"){
+        let id = get_uid();
+        let comp = make_component(new ControlFlow(id, "None"));
+        jointId2id[comp.id] = id;
+        id2comp[id] = comp;
+        id2class[id] = new ControlFlow(id, "None");
+        id2comp[id].addTo(graph);
+    }
+    else if(tt == "data-flow"){
+        let id = get_uid();
+        let comp = make_component(new DataFlow(id, "Data"));
+        jointId2id[comp.id] = id;
+        id2comp[id] = comp;
+        id2class[id] = new DataFlow(id, "Data");
+        id2comp[id].addTo(graph);
+    }
     else{
         alert("No such component available :(");
     }
@@ -97,7 +137,8 @@ const addComponent = (e) => {
 
 const render_comp_details = (comp) => {
     let cid = comp.id;
-    let pos = comp.position(), sz = comp.size();
+    let pos = comp.position(), 
+        sz = comp.attributes.type == 'standard.Rectangle' ? comp.size() : {width : '--', height : '--' };
     let id = jointId2id[cid];
     console.log(cid, id);
     console.log(comp.attr());
@@ -105,15 +146,40 @@ const render_comp_details = (comp) => {
     document.getElementById("sc-id").innerHTML = `ID: ${id}`;
     document.getElementById("sc-pos").innerHTML = `Position: ${pos.x} ${pos.y}`;
     document.getElementById("sc-input-dim").value = `${sz.width} ${sz.height}`;
-    document.getElementById("sc-input-txt").value = `${comp.attr().label.text}`;
+    if(comp.attributes.type == 'standard.Rectangle' )
+        document.getElementById("sc-input-txt").value = `${comp.attr().label.text}`;
+    else 
+        document.getElementById("sc-input-txt").value = `${comp.labels()[0].attrs.text.text}`;
+
+    if(comp.attributes.type == 'standard.Link'){
+        let a = '', b = '';
+        console.log(comp.source());
+        console.log(comp.source().id);
+        if(comp.source().id){
+            a = `${jointId2id[comp.source().id]}`
+        }
+        else{
+            let p = comp.source();
+            a = `(${p.x},${p.y})`;
+        }
+        if(comp.target().id){
+            b =  `${jointId2id[comp.target().id]}`;
+        }
+        else{
+            let p = comp.target();
+            b = `(${p.x},${p.y})`
+        }
+        document.getElementById("sc-input-src-tar").value = `${a} ${b}`
+    }
     last_selected = id;
 };
 
 const reset_comp_details = () => {
     document.getElementById("sc-id").innerHTML = `ID: --`;
     document.getElementById("sc-pos").innerHTML = `Position: -- --`;
-    document.getElementById("sc-input-dim").value = `-- --`;
+    document.getElementById("sc-input-dim").value = ``;
     document.getElementById("sc-input-txt").value = ``;
+    document.getElementById("sc-input-src-tar").value = ``;
 };
 
 const init_window = () => {
@@ -124,7 +190,8 @@ const init_window = () => {
         model: graph,
         width: WIDTH,
         height: HEIGHT,
-        gridSize: 1,
+        gridSize: 10,
+        drawGrid : true,
         cellViewNamespace: namespace
     });
 
@@ -135,6 +202,8 @@ const init_window = () => {
     })
     paper.on("cell:contextmenu", (cellView, e, x, y) => {
         console.log("cell:contextmenu : ", cellView, e, x, y);
+        console.log(cellView.model);
+        render_comp_details(cellView.model);
     })
     paper.on("blank:contextmenu", (cellView, e, x, y) => {
         console.log("blank:contextmenu : ", cellView, e, x, y);
@@ -145,19 +214,78 @@ const init_window = () => {
 
     document.getElementById("sc-update").addEventListener("click", (e) => {
         let id = last_selected;
+        let comp = id2comp[id]; 
+        
         if(id > 0){
             let dim = document.getElementById("sc-input-dim").value;
             let txt = document.getElementById("sc-input-txt").value;
+
+            if(comp.attributes.type == 'standard.Link'){
+                let link = document.getElementById("sc-input-src-tar").value;
+                console.log("Link ", link);
+                try{
+                    let sid = link.split(" ")[0];
+                    let tid = link.split(" ")[1];
+                    if(sid[0] == '('){
+                        console.log(sid, tid);
+                        sid = sid.slice(1, -1);
+                        tid = tid.slice(1, -1);
+                        console.log(sid, tid);
+                        let s = { x : parseInt(sid.split(",")[0]), y : parseInt(sid.split(",")[1]) };
+                        let e = { x : parseInt(tid.split(",")[0]), y : parseInt(tid.split(",")[1]) };
+                        console.log(s, e);
+                        id2comp[id].source(s);
+                        id2comp[id].target(e);
+                    }
+                    else if(sid > 0 && tid > 0){
+                        id2comp[id].source(id2comp[sid]);
+                        id2comp[id].target(id2comp[tid]);
+                    }
+                    id2comp[id].label(0, {
+                        attrs: {
+                            text: {
+                                text: txt
+                            }
+                        }
+                    });
+                }
+                catch(e){
+                    console.log(e);
+                    alert("Bad entry! :(");
+                }
+            }
+            else{
+                console.log("Rect");
+                try{
+                    let dx = parseInt(dim.split(" ")[0]);
+                    let dy = parseInt(dim.split(" ")[1]);
+                    id2comp[id].resize(dx, dy);
+                }
+                catch(e){
+                    console.log(e);
+                    alert("Bad entry!!");
+                }
+                id2comp[id].attr("label/text", txt);    
+            }
+
+            
+            // link part --
+            /*
+            let link = document.getElementById("sc-input-src-tar").value;
             try{
-                let dx = parseInt(dim.split(" ")[0]);
-                let dy = parseInt(dim.split(" ")[1]);
-                id2comp[id].resize(dx, dy);
+                let sid = parseInt(link.split(" ")[0]);
+                let tid = parseInt(link.split(" ")[1]);
+                if(sid > 0 && tid > 0){
+                    id2comp[id].source(id2comp[sid]);
+                    id2comp[id].target(id2comp[tid]);
+                }
             }
             catch(e){
                 console.log(e);
-                alert("Bad entry!!");
+                alert("Bad entry! :(");
+
             }
-            id2comp[id].attr("label/text", txt);
+            */
         }
         reset_comp_details();
     });

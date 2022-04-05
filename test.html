@@ -65,18 +65,57 @@
         })
         paper.on("link:contextmenu", (cellView, e, x, y) => {
             console.log("link:contextmenu : ", cellView, e, x, y);
+            let comp = cellView.model;
+            console.log("==========");
+            console.log(comp);
+            console.log(comp.source(), comp.target());
         })
 
         var rect = make_rect(100, 200, 50, 50, "hey");
         var rect2 = make_rect(400, 200, 100, 100, "hey2");
+        var rect3 = make_rect(250, 250, 50, 50, "hey3");
+
         console.log(rect);
         rect.addTo(graph);
         rect2.addTo(graph);
+        rect3.addTo(graph);
+
 
         var link = new joint.shapes.standard.Link();
         link.source(rect);
         link.target(rect2);
+        link.attr({
+            line : {
+                stroke : "yellow",
+                strokeWidth : 7
+            }
+        })
         link.addTo(graph);
+
+        var link2 = link.clone();
+        link2.source(rect3);
+        link2.target(rect);
+        link2.labels([{
+            attrs : {
+                text : {
+                    text : "data"
+                }
+            }
+        }]);
+        link2.attr({
+            line : {
+                stroke : "black",
+                strokeWidth : 1
+            }
+        })
+
+        link2.addTo(graph);
+
+        var link3 = new joint.shapes.standard.Link();
+        link3.source({x : 100, y : 100});
+        link3.target({x : 500, y : 500});
+        link3.addTo(graph);
+
 
     </script>
 </body>
