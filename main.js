@@ -8,25 +8,32 @@ var loadedfjson = false;
 const init_setup = () => {
   let nodes = document.getElementsByClassName(file_name_container);
   for (let i = 0; i < nodes.length; i++) {
-    nodes[i].innerHTML = file_name;
+    nodes[i].innerText = file_name;
   }
-  let root = document.getElementById(file_name_update);
-  let btn = root.getElementsByTagName('button')[0];
+  let renamebtn = document.getElementById('rename-file');
   // console.log(root, btn);
-  btn.addEventListener('click', (e) => {
-    let root = document.getElementById(file_name_update);
-    let name = root.getElementsByTagName('input')[0];
-    // console.log(root, name);
-    let fname = name.value;
-    file_name = fname;
-    let nodes = document.getElementsByClassName(file_name_container);
-    for (let i = 0; i < nodes.length; i++) {
-      nodes[i].innerHTML = file_name;
+  renamebtn.addEventListener('click', (e) => {
+    let name = getfilename();
+    if (name != null) {
+      let nodes = document.getElementsByClassName(file_name_container);
+      for (let i = 0; i < nodes.length; i++) {
+        nodes[i].innerText = name;
+      }
     }
-    name.value = '';
   });
 };
 
+function getfilename() {
+  var name = prompt('Please enter file name', 'Untitled');
+  if (name != null && name.trim() != '') {
+    console.log(name);
+    file_name = name;
+    return name;
+  } else {
+    alert('Please enter a valid file name');
+    return null;
+  }
+}
 // ----------------------------------------------------------- //
 // Jointjs window things
 var namespace, graph, paper;
