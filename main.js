@@ -2,6 +2,7 @@
 
 // File handling and other minor things
 var file_name = 'Untitled';
+var id_tip;
 const file_name_container = 'file-name';
 const file_name_update = 'change-file-name';
 var loadedfjson = false;
@@ -214,6 +215,15 @@ const init_window = () => {
     console.log('element:contextmenu : ', cellView, e, x, y);
     render_comp_details(comp);
   });
+  paper.on('cell:mouseover', (cellView, e, x, y) => {
+    let comp = cellView.model;
+    console.log('cell:mouseover : ', cellView, e, x, y);
+    showID(comp);
+  });
+  paper.on('cell:mouseout', (cellView, e, x, y) => {
+    console.log('cell:mouseout : ', cellView, e, x, y);
+    removeID();
+  });
   paper.on('cell:contextmenu', (cellView, e, x, y) => {
     console.log('cell:contextmenu : ', cellView, e, x, y);
     console.log(cellView.model);
@@ -366,4 +376,23 @@ function save_file() {
   let data = JSON.stringify(graph.toJSON());
   let blob = new Blob([data], { type: 'text/plain;charset=utf-8' });
   saveAs(blob, `${file_name}.json`);
+}
+
+function showID(comp) {
+  console.log(comp);
+  id_tip = new joint.shapes.basic.Circle({
+    position: {
+      x: comp.position().x + comp.size().width - 20,
+      y: comp.position().y,
+    },
+    size: { width: 20, height: 20 },
+    attrs: { text: { text: jointId2id[comp.id] }, circle: { fill: '#2ECC71' } },
+    name: 'id_tip',
+  });
+  graph.addCell(id_tip);
+}
+function removeID() {
+  if (id_tip) {
+    id_tip.remove();
+  }
 }
