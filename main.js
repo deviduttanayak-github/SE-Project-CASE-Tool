@@ -75,7 +75,6 @@ const make_rect = (comp) => {
 
 const make_link = (comp) => {
   console.log('make_link ');
-  comp.display();
   var link = new joint.shapes.standard.Link();
   link.source(comp.src);
   link.target(comp.tar);
@@ -98,7 +97,6 @@ const make_link = (comp) => {
 };
 
 const make_component = (comp) => {
-  console.log(comp.display());
   var obj = null;
   if (comp.type == TYPE_BOX) {
     obj = make_rect(comp);
@@ -158,7 +156,6 @@ const render_comp_details = (comp) => {
   let id = jointId2id[cid];
   console.log(cid, id);
   console.log(comp.attr());
-  id2class[id].display();
   document.getElementById('sc-id').innerHTML = `ID: ${id}`;
   document.getElementById('sc-pos').innerHTML = `Position: ${pos.x} ${pos.y}`;
   document.getElementById('sc-input-dim').value = `${sz.width} ${sz.height}`;
@@ -286,24 +283,6 @@ const init_window = () => {
         }
         id2comp[id].attr('label/text', txt);
       }
-
-      // link part --
-      /*
-            let link = document.getElementById("sc-input-src-tar").value;
-            try{
-                let sid = parseInt(link.split(" ")[0]);
-                let tid = parseInt(link.split(" ")[1]);
-                if(sid > 0 && tid > 0){
-                    id2comp[id].source(id2comp[sid]);
-                    id2comp[id].target(id2comp[tid]);
-                }
-            }
-            catch(e){
-                console.log(e);
-                alert("Bad entry! :(");
-
-            }
-            */
     }
     reset_comp_details();
   });
@@ -370,6 +349,12 @@ $('#fileinput').on('change', function (e) {
     let lines = e.target.result;
     var newArr = JSON.parse(lines);
     graph.fromJSON(newArr);
+    let models = graph.attributes.cells.models;
+    for(let i=0; i<models.length; i+=1){
+        let id = get_uid();
+        id2comp[id] = models[i];
+        jointId2id[models[i].id] = id;
+    }
   }
   let nodes = document.getElementsByClassName(file_name_container);
   for (let i = 0; i < nodes.length; i++) {
