@@ -4,7 +4,7 @@
 ![Problem Statement](./images/problem.JPG)
 
 ## SRS
-[SRS Document](./doc/demo.txt)
+[Report Document](./doc/SRS_LAB_PROJECT.pdf)
 
 ## Submitted by Team - Group 14
 - DEVIDUTA NAYAK (119CS0144)
@@ -12,6 +12,7 @@
 - PARESH KUMAR PAGAL (119CS0147)
 - ADITYA NARAYAN PANDA (119CS0148)
 
-## Website Link
-[Web Link](https://casetool.netlify.app/)
+## Links
+[Website Link](https://casetool.netlify.app/) <br>
+[Repo Link](https://github.com/deviduttanayak-github/SE-Project-CASE-Tool)
 
